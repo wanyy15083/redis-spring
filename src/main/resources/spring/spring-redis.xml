@@ -12,22 +12,69 @@
 
     <!-- redis配置 -->
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
-        <property name="maxTotal" value="${redis.maxTotal}" />
-        <property name="maxIdle" value="${redis.maxIdle}" />
-        <property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
-        <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+        <property name="maxTotal" value="${redis.maxTotal}"/>
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
     </bean>
 
     <!-- 单个redis连接配置 -->
     <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-        <property name="hostName" value="${redis.host}" />
-        <property name="port" value="${redis.port}" />
-        <property name="password" value="${redis.password}" />
+        <property name="hostName" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="password" value="${redis.password}"/>
         <property name="poolConfig" ref="jedisPoolConfig"/>
     </bean>
 
     <!--redisTemplate配置-->
     <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-        <property name="connectionFactory" ref="jedisConnectionFactory" />
+        <property name="connectionFactory" ref="jedisConnectionFactory"/>
     </bean>
+
+
+
+    <!--<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">-->
+        <!--<property name="connectionFactory" ref="jedisConnectionFactory"/>-->
+        <!--<property name="keySerializer">-->
+            <!--<bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>-->
+        <!--</property>-->
+        <!--<property name="valueSerializer">-->
+            <!--<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>-->
+            <!--<bean class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer"/>-->
+        <!--</property>-->
+        <!--<property name="hashKeySerializer">-->
+            <!--<bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>-->
+        <!--</property>-->
+        <!--<property name="hashValueSerializer">-->
+            <!--<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>-->
+            <!--<bean class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer"/>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+
+    <!-- shardedJedis方式 -->
+    <!-- 构建连接池配置信息 -->
+    <!--<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">-->
+        <!--&lt;!&ndash; 设置最大连接数 &ndash;&gt;-->
+        <!--<property name="maxTotal" value="${redis.maxTotal}" />-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 定义集群连接池 &ndash;&gt;-->
+    <!--<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">-->
+        <!--&lt;!&ndash; 设置连接池配置信息 &ndash;&gt;-->
+        <!--<constructor-arg index="0" ref="jedisPoolConfig" />-->
+        <!--&lt;!&ndash; 定义集群信息 &ndash;&gt;-->
+        <!--<constructor-arg index="1">-->
+            <!--<array>-->
+                <!--<bean class="redis.clients.jedis.JedisShardInfo">-->
+                    <!--<constructor-arg index="0" value="${redis.host}" />-->
+                    <!--<constructor-arg index="1" value="${redis.port}" />-->
+                <!--</bean>-->
+                <!--&lt;!&ndash; <bean class="redis.clients.jedis.JedisShardInfo"> &ndash;&gt;-->
+                <!--&lt;!&ndash; <constructor-arg index="0" value="${redis.host2}" /> &ndash;&gt;-->
+                <!--&lt;!&ndash; <constructor-arg index="1" value="${redis.port2}" /> &ndash;&gt;-->
+                <!--&lt;!&ndash; </bean> &ndash;&gt;-->
+            <!--</array>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
 </beans>

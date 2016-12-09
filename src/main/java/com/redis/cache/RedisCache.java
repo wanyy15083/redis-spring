@@ -19,7 +19,7 @@ public class RedisCache {
     }
 
     public String get(final String key) {
-        return redisTemplate.opsForValue().get(key);
+        return redisTemplate.boundValueOps(key).get();
     }
 
     public Boolean exist(final String key) {
@@ -41,4 +41,5 @@ public class RedisCache {
     public void set(final String key, final String value, final long seconds) {
         redisTemplate.boundValueOps(key).set(value, seconds, TimeUnit.SECONDS);
     }
+
 }
